@@ -11,7 +11,7 @@ describe "Static pages" do
       click_link "Help"
       expect(page).to have_title(full_title('Help'))
       click_link "Sign in"
-      expect(page).to have_title(full_title('Sign up'))
+      expect(page).to have_title(full_title('Sign in'))
       click_link "About"
       expect(page).to have_title(full_title('About Us'))
       click_link "Contact"
@@ -32,12 +32,6 @@ describe "Static pages" do
     it { should have_title(full_title('Help')) }
   end
 
-  describe 'Sign in page' do
-    before { visit signup_path }
-    it { should have_content('Sign up') }
-    it { should have_title(full_title('Sign up')) }
-  end
-
   describe 'About page' do
     before { visit about_path }
     it { should have_content('About Us') }
@@ -49,4 +43,5 @@ describe "Static pages" do
     it { should have_content('Contact') }
     it { should have_title(full_title('Contact')) }
   end
+
 end
