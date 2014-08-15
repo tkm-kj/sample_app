@@ -102,4 +102,9 @@ describe User do
     before { @user.password = @user.password_confirmation = 'a' * 5 }
     it { should be_invalid }
   end
+
+  describe 'トークンを記憶する' do
+    before { @user.save }
+    its(:remember_token) { should_not be_blank }
+  end
 end
