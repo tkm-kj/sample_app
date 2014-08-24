@@ -4,10 +4,39 @@ describe "User pages" do
   subject { page }
   describe 'profile page' do
     let(:user) { FactoryGirl.create(:user) }
+    let(:another_user) { FactoryGirl.create(:user) }
+    let!(:m1) { FactoryGirl.create(:micropost, user: user, content: 'foo') }
+    let!(:m2) { FactoryGirl.create(:micropost, user: user, content: 'bar') }
+    let!(:am) { FactoryGirl.create(:micropost, user: another_user, content: 'homo') }
+
     before { visit user_path(user) }
 
     it { should have_content(user.name) }
     it { should have_title(user.name) }
+
+    describe 'microposts' do
+      it { should have_content(m1.content) }
+      it { should have_content(m2.content) }
+      it { should have_content(user.microposts.count) }
+      it { should_not have_content('delete', href: micropost_path(user.microposts.first)) }
+    end
+
+    describe 'ログインする' do
+      before do
+        sign_in user
+      end
+      it '削除リンクが表示される' do
+        expect(page).to have_link('delete', href: micropost_path(user.microposts.first))
+      end
+      describe '別のユーザーのprofileに飛ぶ' do
+        before { visit user_path(another_user) }
+
+        it '削除リンクが表示されない' do
+          expect(page).not_to have_link('delete', href: micropost_path(another_user.microposts.first))
+
+        end
+      end
+    end
   end
 
   describe "signup page" do
@@ -118,7 +147,7 @@ describe "User pages" do
       end
     end
 
-    describe '削除リンク' do
+    describe 'ユーザー削除リンク' do
       it { should_not have_link('delete') }
 
       describe '管理者ユーザー' do

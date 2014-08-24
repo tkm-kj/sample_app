@@ -56,6 +56,18 @@ describe "Authentication" do
         end
       end
 
+      describe 'Microposts controller内の処理を行う' do
+        describe 'createアクションを実行' do
+          before { post microposts_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe 'destroyアクションを実行' do
+          before { delete micropost_path(FactoryGirl.create(:micropost)) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
+
       describe '保護されたページに行くとき' do
         before do
           visit edit_user_path(user)

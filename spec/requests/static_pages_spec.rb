@@ -24,6 +24,25 @@ describe "Static pages" do
     it { should have_content('Sample App') }
     it { should have_title(full_title('')) }
     it { should_not have_title("| Home") }
+
+    describe 'ユーザーがサインインしている場合' do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: 'hoge')
+        FactoryGirl.create(:micropost, user: user, content: 'fuga')
+        sign_in user
+        visit root_path
+      end
+      it { should have_content(user.name) }
+      it 'ユーザーのfeedが表示される' do
+        user.feed.paginate(page: 1).each do |item|
+          expect(page).to have_selector("li##{item.id}", text: item.content)
+        end
+      end
+      it '適切なfeed数が表示されるr' do
+        expect(page).to have_content(user.microposts.count)
+      end
+    end
   end
 
   describe 'Help page' do
