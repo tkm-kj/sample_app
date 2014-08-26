@@ -42,6 +42,17 @@ describe "Static pages" do
       it '適切なfeed数が表示されるr' do
         expect(page).to have_content(user.microposts.count)
       end
+
+      describe 'フォロー数とフォロワー数' do
+        let(:other_user) { FactoryGirl.create(:user) }
+        before do
+          other_user.follow!(user)
+          visit root_path
+        end
+
+        it { should have_link('0 followings', href: following_user_path(user)) }
+        it { should have_link('1 followers', href: followers_user_path(user)) }
+      end
     end
   end
 

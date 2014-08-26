@@ -54,6 +54,16 @@ describe "Authentication" do
           before { visit users_path }
           it { should have_title('Sign in') }
         end
+
+        describe 'following pageに移動' do
+          before { visit following_user_path(user) }
+          it { should have_title('Sign in') }
+        end
+
+        describe 'followers pageに移動' do
+          before { visit followers_user_path(user) }
+          it { should have_title('Sign in') }
+        end
       end
 
       describe 'Microposts controller内の処理を行う' do
@@ -67,6 +77,19 @@ describe "Authentication" do
           specify { expect(response).to redirect_to(signin_path) }
         end
       end
+
+      describe 'Relationships controller内の処理を行う' do
+        describe 'createアクションを実行' do
+          before { post relationships_path }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+
+        describe 'destroyアクションを実行' do
+          before { delete relationship_path(1) }
+          specify { expect(response).to redirect_to(signin_path) }
+        end
+      end
+
 
       describe '保護されたページに行くとき' do
         before do
