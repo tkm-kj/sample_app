@@ -48,6 +48,8 @@ gem 'bootstrap-will_paginate', '0.0.9'
 gem 'minitest'
 gem 'bootstrap-sass', '2.3.2.0'
 gem 'bcrypt-ruby', '3.1.2'
+gem 'haml-rails'
+gem 'erb2haml'
 group :production do
   gem 'pg', '0.15.1'
   gem 'rails_12factor', '0.0.2'
